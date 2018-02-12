@@ -29,7 +29,7 @@ export default class App extends React.Component {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
           {!this.state.userInfo ? (
-            <Button title="Open FB Auth" onPress={this._handlePressAsync} />
+            <Button title="Open FB Auth" onPress={this._handlePressAsync} color="#4267B2" />
           ) : (
             this._renderUserInfo()
           )}          
