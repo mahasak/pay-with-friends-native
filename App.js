@@ -1,13 +1,19 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Image, Button, Text } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
+import { AuthSession } from 'expo';
+
+const FB_APP_ID = '130497377531918';
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    userInfo: null,
   };
+
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -23,11 +29,41 @@ export default class App extends React.Component {
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
+          {!this.state.userInfo ? (
+            <Button title="Open FB Auth" onPress={this._handlePressAsync} />
+          ) : (
+            this._renderUserInfo()
+          )}          
         </View>
       );
     }
   }
+
+  _handlePressAsync = async () => {
+    let redirectUrl = AuthSession.getRedirectUrl();
+
+    // You need to add this url to your authorized redirect urls on your Facebook app
+    console.log({ redirectUrl });
+
+    let result = await AuthSession.startAsync({
+      authUrl:
+        `https://www.facebook.com/v2.8/dialog/oauth?response_type=token` +
+        `&client_id=${FB_APP_ID}` +
+        `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+    });
+
+    if (result.type !== 'success') {
+      alert('Uh oh, something went wrong');
+      return;
+    }
+
+    let accessToken = result.params.access_token;
+    let userInfoResponse = await fetch(
+      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,picture.type(large)`
+    );
+    const userInfo = await userInfoResponse.json();
+    this.setState({ userInfo });
+  };
 
   _loadResourcesAsync = async () => {
     return Promise.all([
