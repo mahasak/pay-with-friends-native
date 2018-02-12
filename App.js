@@ -39,6 +39,19 @@ export default class App extends React.Component {
     }
   }
 
+  _renderUserInfo = () => {
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <Image
+          source={{ uri: this.state.userInfo.picture.data.url }}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
+        <Text style={{ fontSize: 20 }}>{this.state.userInfo.name}</Text>
+        <Text>ID: {this.state.userInfo.id}</Text>
+      </View>
+    );
+  };
+
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
 

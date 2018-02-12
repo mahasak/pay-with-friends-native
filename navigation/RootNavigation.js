@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
+
 const RootStackNavigator = StackNavigator(
   {
     Main: {
@@ -21,6 +22,15 @@ const RootStackNavigator = StackNavigator(
 );
 
 export default class RootNavigator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userInfo: Object.assign({}, this.props.userInfo),
+      errors: {   }
+    };
+  }
+  
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }

@@ -23,6 +23,12 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
             <Image
+              source={{ uri: this.state.userInfo.picture.data.url }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+            />
+            <Text style={{ fontSize: 20 }}>{this.state.userInfo.name}</Text>
+            <Text>ID: {this.state.userInfo.id}</Text>
+            <Image
               source={
                 __DEV__
                   ? require('../assets/images/robot-dev.png')
