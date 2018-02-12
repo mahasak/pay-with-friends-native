@@ -14,7 +14,6 @@ export default class App extends React.Component {
     userInfo: null,
   };
 
-
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
